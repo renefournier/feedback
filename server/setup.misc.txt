@@ -1,0 +1,27 @@
+# CREATE database, tables, etc.
+
+psql -h localhost -U rene -P pager=off -f init.sql.txt
+
+
+
+# Generate sequelize models from database schemae
+
+sequelize-auto -h localhost -v ON_ERROR_STOP=1 -d feedback_1 -U root --dialect postgres -o ./Models
+
+
+
+# ALTOGETHER NOW!
+
+cd /Users/rene/Sites/mcmxiv.com/Feedback/Server && psql -h localhost -U rene -P pager=off -f init.sql.txt && sequelize-auto -h localhost -v ON_ERROR_STOP=1 -d feedback_1 -U root --dialect postgres -o ./Models
+
+
+
+pm2 start conductor-server.js -i 1 --name=feedback
+
+pm2 save
+
+
+
+pg_dump -h localhost -p 5432 -U postgres -F c -b -v -f "fb1.backup" feedback_1
+
+pg_restore -h localhost -p 5432 -U postgres -d feedback_1 -v  "fb1.backup"

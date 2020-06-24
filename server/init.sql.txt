@@ -1,0 +1,333 @@
+
+DROP DATABASE IF EXISTS feedback_1;
+CREATE DATABASE feedback_1;
+
+
+
+\c feedback_1;
+
+CREATE EXTENSION postgis;
+SELECT postgis_full_version();
+
+DROP TABLE IF EXISTS events CASCADE;
+DROP TABLE IF EXISTS parts CASCADE;
+DROP TABLE IF EXISTS ratings CASCADE;
+
+
+
+DROP TABLE IF EXISTS events CASCADE;
+CREATE TABLE events
+(
+  id serial primary key,
+  created timestamp with time zone NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  updated timestamp with time zone,
+  deleted timestamp with time zone,
+  name text NOT NULL,
+  organizer_name text NOT NULL,
+  organizer_pin text NOT NULL,
+  view_key text NOT NULL,
+  rating_key text NOT NULL,
+  UNIQUE (view_key),
+  UNIQUE (rating_key)
+);
+ALTER SEQUENCE events_id_seq RESTART WITH 17117;
+\d+ events;
+
+INSERT INTO events (name, organizer_name, organizer_pin, view_key, rating_key) VALUES
+('2019 Regional Convention (Edmonton)', 'René', '1234', '12341234', 'asdfasdfasdf'),
+('2020 Circuit Assembly - Calgary A2C', 'René', '1234', '09870987', 'qwerqwer'),
+('2020 Circuit Assembly - Calgary A2A', 'René', '1234', '98769876', 'poiupoiu');
+
+
+DROP TABLE IF EXISTS parts CASCADE;
+CREATE TABLE parts
+(
+  id serial primary key,
+  created timestamp with time zone NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  updated timestamp with time zone,
+  deleted timestamp with time zone,
+  event_id integer NOT NULL,
+  name text NOT NULL,
+  FOREIGN KEY (event_id) REFERENCES events(id) ON DELETE CASCADE
+);
+ALTER SEQUENCE parts_id_seq RESTART WITH 17117;
+\d+ parts;
+
+INSERT INTO parts (event_id, name) VALUES 
+(17117, 'CHAIRMAN’S ADDRESS: “Love Never Fails”​—Why?'),
+(17117, 'SYMPOSIUM: Beware of Trusting in What Fails! Wealth'),
+(17117, 'SYMPOSIUM: Beware of Trusting in What Fails! Status and Fame'),
+(17117, 'SYMPOSIUM: Beware of Trusting in What Fails! Human Wisdom'),
+(17117, 'SYMPOSIUM: Beware of Trusting in What Fails! Strength and Beauty'),
+(17117, 'DRAMATIC BIBLE READING: Jehovah Kept Showing Loyal Love'),
+(17117, 'Jehovah Loves Those Who Love His Son'),
+
+(17118, '“Knowledge Puffs Up, But Love Builds Up”'),
+(17118, 'Symposium: They Built Others Up: Barnabas'),
+(17118, 'Symposium: They Built Others Up: Paul'),
+(17118, 'Symposium: They Built Others Up: Dorcas'),
+(17118, 'Impart More Than the Good News in the Ministry'),
+(17118, 'Dedication and Baptism'),
+
+(17119, '“Knowledge Puffs Up, But Love Builds Up”'),
+(17119, 'Symposium: They Built Others Up: Barnabas'),
+(17119, 'Symposium: They Built Others Up: Paul'),
+(17119, 'Symposium: They Built Others Up: Dorcas'),
+(17119, 'Impart More Than the Good News in the Ministry'),
+(17119, 'Dedication and Baptism');
+
+
+DROP TABLE IF EXISTS ratings CASCADE;
+CREATE TABLE ratings
+(
+  id serial primary key,
+  created timestamp with time zone NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  updated timestamp with time zone,
+  deleted timestamp with time zone,
+  event_id integer,
+  part_id integer,
+  listener_name text NOT NULL,
+  listener_pin text NOT NULL,
+  th_01 boolean,
+  th_02 boolean,
+  th_03 boolean,
+  th_04 boolean,
+  th_05 boolean,
+  th_06 boolean,
+  th_07 boolean,
+  th_08 boolean,
+  th_09 boolean,
+  th_10 boolean,
+  th_11 boolean,
+  th_12 boolean,
+  th_13 boolean,
+  th_14 boolean,
+  th_15 boolean,
+  th_16 boolean,
+  th_17 boolean,
+  th_18 boolean,
+  th_19 boolean,
+  th_20 boolean,
+  comments text,
+  FOREIGN KEY (event_id) REFERENCES events(id) ON DELETE CASCADE,
+  FOREIGN KEY (part_id) REFERENCES parts(id) ON DELETE CASCADE
+);
+ALTER SEQUENCE ratings_id_seq RESTART WITH 17117;
+CREATE INDEX ratings_event_id_idx ON ratings USING (event_id);
+CREATE INDEX ratings_part_id_idx ON ratings USING (part_id);
+\d+ ratings;
+
+INSERT INTO ratings (
+event_id,
+part_id,
+listener_name,
+listener_pin,
+th_01,
+th_02,
+th_03,
+th_04,
+th_05,
+th_06,
+th_07,
+th_08,
+th_09,
+th_10,
+th_11,
+th_12,
+th_13,
+th_14,
+th_15,
+th_16,
+th_17,
+th_18,
+th_19,
+th_20,
+comments
+) VALUES (
+17118,
+17124,
+'René',
+'1234',
+null,
+true,
+null,
+null,
+null,
+false,
+null,
+null,
+null,
+null,
+null,
+null,
+null,
+true,
+null,
+null,
+null,
+null,
+null,
+null,
+'Nice, friendly manner. Could perhaps make better use of the scriptures, specifically in application.');
+
+INSERT INTO ratings (
+event_id,
+part_id,
+listener_name,
+listener_pin,
+th_01,
+th_02,
+th_03,
+th_04,
+th_05,
+th_06,
+th_07,
+th_08,
+th_09,
+th_10,
+th_11,
+th_12,
+th_13,
+th_14,
+th_15,
+th_16,
+th_17,
+th_18,
+th_19,
+th_20,
+comments
+) VALUES (
+17118,
+17124,
+'Sean',
+'1234',
+null,
+true,
+null,
+null,
+null,
+null,
+null,
+null,
+null,
+false,
+null,
+null,
+null,
+true,
+null,
+null,
+true,
+null,
+null,
+null,
+'Great talk. Maybe slow down a bit?');
+
+INSERT INTO ratings (
+event_id,
+part_id,
+listener_name,
+listener_pin,
+th_01,
+th_02,
+th_03,
+th_04,
+th_05,
+th_06,
+th_07,
+th_08,
+th_09,
+th_10,
+th_11,
+th_12,
+th_13,
+th_14,
+th_15,
+th_16,
+th_17,
+th_18,
+th_19,
+th_20,
+comments
+) VALUES (
+17118,
+17125,
+'Sean',
+'1234',
+null,
+null,
+null,
+null,
+null,
+null,
+true,
+true,
+null,
+null,
+null,
+null,
+null,
+null,
+null,
+null,
+null,
+null,
+null,
+false,
+'Overall very effective. Conclusion could use better exhortation, call to action.');
+
+INSERT INTO ratings (
+event_id,
+part_id,
+listener_name,
+listener_pin,
+th_01,
+th_02,
+th_03,
+th_04,
+th_05,
+th_06,
+th_07,
+th_08,
+th_09,
+th_10,
+th_11,
+th_12,
+th_13,
+th_14,
+th_15,
+th_16,
+th_17,
+th_18,
+th_19,
+th_20,
+comments
+) VALUES (
+17118,
+17125,
+'René',
+'1234',
+null,
+null,
+null,
+null,
+true,
+null,
+true,
+null,
+null,
+null,
+null,
+null,
+null,
+true,
+null,
+null,
+null,
+null,
+null,
+false,
+'Was there a conclusion?');
+
+
+

@@ -21,7 +21,7 @@
     "svelte-spa-router": "^2.0.0"
   },
   "dependencies": {
-    "sirv-cli": "^0.4.4"
+    "sirv-cli": "^0.4.6"
   },
   "prettier": {
     "svelteSortOrder": "scripts-markup-styles"
